@@ -86,7 +86,7 @@ Response
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/thesohailahmad/HisabKeep
 cd HisabKeep
 ```
 
@@ -115,7 +115,7 @@ Create a `.env` file and add your PostgreSQL database configuration.
 Example:
 
 ```env
-DATABASE_URL=your_database_url
+see .env.example file
 ```
 
 ### 5. Run the API
