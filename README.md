@@ -149,7 +149,7 @@ Future development will include automated tests for:
 * [ ] Input validation improvements
 * [ ] Pagination
 * [ ] Expense filtering
-* [ ] User authentication
+* [x] User authentication
 * [ ] Authorization
 * [ ] Automated testing
 * [ ] API documentation improvements
