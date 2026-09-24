@@ -3,6 +3,7 @@ from src.schemas.user import UserCreate , UserResponse
 from fastapi import APIRouter , Depends , status , HTTPException , Query
 from sqlalchemy.orm import Session
 from src.database.session import get_db
+from src.core.security import hash_password
 
 router = APIRouter(prefix="/user" , tags=["User"])
 
@@ -23,7 +24,6 @@ def register_user(data:UserCreate , db : Session = Depends(get_db)):
             detail="Username already exists"
         )
 
-    # Check if email already exists
     existing_email = db.query(UserModel).filter(
         UserModel.email == data.email
     ).first()
@@ -34,15 +34,13 @@ def register_user(data:UserCreate , db : Session = Depends(get_db)):
             detail="Email already exists"
         )
 
-    # Create user
     new_user = UserModel(
         name=data.name,
         username=data.username,
-        hash_password=data.password,
+        hash_password=hash_password(data.password),
         email=data.email
     )
 
-    # Save user
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
