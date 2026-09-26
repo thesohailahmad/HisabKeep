@@ -1,9 +1,9 @@
 from src.models.user import UserModel
-from src.schemas.user import UserCreate , UserResponse
+from src.schemas.user import UserCreate , UserResponse , UserLogin , Token
 from fastapi import APIRouter , Depends , status , HTTPException , Query
 from sqlalchemy.orm import Session
 from src.database.session import get_db
-from src.core.security import hash_password
+from src.core.security import hash_password , verify_password , create_access_token
 
 router = APIRouter(prefix="/user" , tags=["User"])
 
@@ -46,3 +46,32 @@ def register_user(data:UserCreate , db : Session = Depends(get_db)):
     db.refresh(new_user)
 
     return new_user
+
+@router.post("/login/",
+            response_model=Token,
+            status_code= status.HTTP_200_OK,
+)
+def login_user(data:UserLogin , db : Session = Depends(get_db)):
+    user = db.query(UserModel).filter(
+    UserModel.username == data.username
+).first()
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid username or Password"
+        )
+    if not verify_password(data.password, user.hash_password):
+        raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid username or password"
+    )
+    access_token = create_access_token(
+    {"sub": str(user.id)}
+)
+    return {
+    "access_token": access_token,
+    "token_type": "bearer"
+}
+    
+
+    
