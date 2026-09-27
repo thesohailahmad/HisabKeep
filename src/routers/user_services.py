@@ -4,8 +4,9 @@ from fastapi import APIRouter , Depends , status , HTTPException , Query
 from sqlalchemy.orm import Session
 from src.database.session import get_db
 from src.core.security import hash_password , verify_password , create_access_token
+from fastapi.security import OAuth2PasswordRequestForm
 
-router = APIRouter(prefix="/user" , tags=["User"])
+router = APIRouter(prefix="/auth" , tags=["User"])
 
 @router.post("/register/",
             response_model=UserResponse,
@@ -51,7 +52,7 @@ def register_user(data:UserCreate , db : Session = Depends(get_db)):
             response_model=Token,
             status_code= status.HTTP_200_OK,
 )
-def login_user(data:UserLogin , db : Session = Depends(get_db)):
+def login_user(data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = db.query(UserModel).filter(
     UserModel.username == data.username
 ).first()

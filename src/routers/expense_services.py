@@ -5,6 +5,7 @@ from src.schemas.expenses import CreateExpense , ExpenseResponse , UpdateExpense
 from fastapi import APIRouter , Depends , status , HTTPException , Query
 from sqlalchemy.orm import Session
 from src.database.session import get_db
+from src.core.oauth2 import get_current_user
 
 router = APIRouter(prefix="/expenses" , tags=["Expenses"])
 
@@ -13,8 +14,8 @@ router = APIRouter(prefix="/expenses" , tags=["Expenses"])
             status_code= status.HTTP_201_CREATED,
 )
 
-def create_expense(data : CreateExpense , db : Session = Depends(get_db)):
-    new_expense = ExpenseModel(**data.model_dump())
+def create_expense(data : CreateExpense , db : Session = Depends(get_db) , current_user = Depends(get_current_user)):
+    new_expense = ExpenseModel(**data.model_dump(), user_id=current_user.id)
     db.add(new_expense)
     db.commit()
     db.refresh(new_expense)
@@ -25,16 +26,16 @@ def create_expense(data : CreateExpense , db : Session = Depends(get_db)):
             status_code=status.HTTP_200_OK,
 )
 
-def view_expense(db : Session = Depends(get_db)):
-    view = db.query(ExpenseModel).all()
+def view_expense(db : Session = Depends(get_db), current_user = Depends(get_current_user)):
+    view = db.query(ExpenseModel).filter(ExpenseModel.user_id == current_user.id).all()
     return view
 
 @router.get("/View_expense/{id}",
             response_model= ExpenseResponse,
             status_code=status.HTTP_200_OK,
 )
-def view_expense( id : int , db : Session = Depends(get_db)):
-    view = db.query(ExpenseModel).get(id)
+def view_single_expense( id : int , db : Session = Depends(get_db) , current_user = Depends(get_current_user) ):
+    view = db.query(ExpenseModel).filter(ExpenseModel.id == id ,ExpenseModel.user_id == current_user.id).first()
     if view is None:
         raise HTTPException(
             status_code=404,
@@ -47,7 +48,7 @@ def view_expense( id : int , db : Session = Depends(get_db)):
         status_code=status.HTTP_200_OK,
 )
 
-def update_expense(data:UpdateExpense, id : int , db : Session = Depends(get_db)):
+def update_expense(data:UpdateExpense, id : int , db : Session = Depends(get_db) , current_user = Depends(get_current_user)):
     update = db.query(ExpenseModel).get(id)
     if update is None:
         raise HTTPException(
@@ -67,7 +68,7 @@ def update_expense(data:UpdateExpense, id : int , db : Session = Depends(get_db)
         status_code=status.HTTP_200_OK,
 )
 
-def delete_expense(id : int , db : Session = Depends(get_db)):
+def delete_expense(id : int , db : Session = Depends(get_db), current_user = Depends(get_current_user)):
     delete = db.query(ExpenseModel).get(id)
     if delete is None:
         raise HTTPException(

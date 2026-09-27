@@ -1,4 +1,4 @@
-from sqlalchemy import Column,Integer,String , TIMESTAMP , func
+from sqlalchemy import Column,Integer,String , TIMESTAMP , func , ForeignKey
 from src.database.base import Base
 
 class ExpenseModel(Base):
@@ -14,3 +14,4 @@ class ExpenseModel(Base):
         nullable=False,
         server_default=func.now()
     )
+    user_id = Column(Integer , ForeignKey("user_registration.id" , ondelete="CASCADE"))
