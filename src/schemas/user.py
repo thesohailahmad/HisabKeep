@@ -1,14 +1,15 @@
-from pydantic import BaseModel , ConfigDict
+from pydantic import BaseModel , ConfigDict , Field , EmailStr
 from datetime import datetime
+from typing import Annotated
 
 class UserBase(BaseModel):
 
-    name : str
-    username : str
-    email : str
+    name : Annotated[str ,Field(...,max_length=150 , title= "Name",description= "Name of User")]
+    username : Annotated[str ,Field(...,max_length=150 , title= "Username",description= "Username for login")]
+    email : Annotated[EmailStr , Field(...,max_length=150,title="Email" , description="Email of user")]
 
 class UserCreate(UserBase):
-    password : str
+    password : Annotated[str , Field(...,min_length=8 , max_length=16 , title="Password" , description="Password must be at least 8 characters long")]
 
 
 class UserResponse(UserBase):

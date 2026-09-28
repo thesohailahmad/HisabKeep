@@ -12,7 +12,7 @@ Base.metadata.create_all(engine)
 
 app = FastAPI(
     title="HisabKeep",
-    version="0.1.0",
+    version="1.1.0",
 )
 app.include_router(expense_services.router)
 app.include_router(user_services.router)

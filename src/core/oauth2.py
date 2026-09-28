@@ -35,7 +35,7 @@ def get_current_user(token: str = Depends(oauth2_schema) , db : Session = Depend
                     status_code=status.HTTP_401_UNAUTHORIZED,
                     detail="Invalid Token credentials"
             )
-    # user_id_int = int(user_id)
+    
     user = db.query(UserModel).filter(
        UserModel.id == int(user_id)
     ).first()
@@ -47,7 +47,3 @@ def get_current_user(token: str = Depends(oauth2_schema) , db : Session = Depend
                 )
 
     return user
-
-
-
-

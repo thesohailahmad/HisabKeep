@@ -49,7 +49,7 @@ def view_single_expense( id : int , db : Session = Depends(get_db) , current_use
 )
 
 def update_expense(data:UpdateExpense, id : int , db : Session = Depends(get_db) , current_user = Depends(get_current_user)):
-    update = db.query(ExpenseModel).get(id)
+    update = db.query(ExpenseModel).filter(ExpenseModel.id == id , ExpenseModel.user_id == current_user.id).first()
     if update is None:
         raise HTTPException(
             status_code=404,
@@ -69,7 +69,7 @@ def update_expense(data:UpdateExpense, id : int , db : Session = Depends(get_db)
 )
 
 def delete_expense(id : int , db : Session = Depends(get_db), current_user = Depends(get_current_user)):
-    delete = db.query(ExpenseModel).get(id)
+    delete = db.query(ExpenseModel).filter(ExpenseModel.id == id , ExpenseModel.user_id == current_user.id).first()
     if delete is None:
         raise HTTPException(
             status_code=404,

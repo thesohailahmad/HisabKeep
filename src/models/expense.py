@@ -7,11 +7,11 @@ class ExpenseModel(Base):
     id = Column(Integer , primary_key=True , index=True)
     name = Column(String(100) , nullable=False)
     category = Column(String(100) , nullable=True)
-    discription = Column(String(300) , nullable=True)
+    description = Column(String(300) , nullable=True)
     amount = Column(Integer ,  nullable=False )
     created_at = Column(
         TIMESTAMP(timezone=True),
         nullable=False,
         server_default=func.now()
     )
-    user_id = Column(Integer , ForeignKey("user_registration.id" , ondelete="CASCADE"))
+    user_id = Column(Integer , ForeignKey("user_registration.id" , ondelete="CASCADE" ))
