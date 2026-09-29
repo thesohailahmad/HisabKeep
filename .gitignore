@@ -25,3 +25,7 @@ uploads/
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Temporary Database
+conftest.py
+
