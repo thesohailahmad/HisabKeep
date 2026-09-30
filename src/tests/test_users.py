@@ -246,4 +246,3 @@ def test_user_missing_password_in_login():
         response = client.post("/auth/login/", data=login_credential)
                 
         assert response.status_code == 422
-
