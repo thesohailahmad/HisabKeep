@@ -1,166 +1,211 @@
 # 💰 HisabKeep
 
-HisabKeep is a backend API for managing personal expenses.
+# Expense Management REST API
 
-The project is being built as a practical backend-learning project to understand how a real API works from request → validation → database → response.
+# Python • FastAPI • PostgreSQL • SQLAlchemy • JWT Authentication • Pytest
 
-## 🚧 Project Status
+## 1. Problem Statement
 
-**In Development**
+HisabKeep is a backend REST API for personal expense management. It provides authenticated users with a secure way to create, view, update, and delete their own expense records. The project focuses on building a clean, maintainable backend with authentication, authorization, validation, database persistence, and automated testing.
 
-Currently, the API includes basic expense management operations using FastAPI and PostgreSQL.
+## 2. 🚧 Architecture
 
-## 🎯 Goals
+The application follows a layered backend architecture:
 
-The main goal of HisabKeep is to learn and practice:
+- Client → FastAPI API → Service/Business Logic → SQLAlchemy → PostgreSQL
 
-* REST API development
-* FastAPI
-* Pydantic validation
-* SQLAlchemy ORM
-* PostgreSQL
-* CRUD operations
-* HTTP status codes and error handling
-* Database relationships
-* Authentication and authorization
-* API testing
-* Clean backend architecture
+- Authentication → JWT access token → protected API endpoints
 
-## 🛠️ Tech Stack
+- Automated tests → isolated test database/session overrides → API verification
 
-* **Python**
-* **FastAPI**
-* **Pydantic**
-* **SQLAlchemy**
-* **PostgreSQL**
-* **Uvicorn**
+## 3. ⚙️ Tech Stack
 
-## 📌 Current Features
+- Python — primary programming language
 
-### Expense Management
+- FastAPI — REST API framework
 
-* Create an expense
-* View an expense by ID
-* Update an expense
-* Delete an expense
-* Handle non-existent expenses with `404 Not Found`
+- PostgreSQL — relational database
 
-## 📂 Project Structure
+- SQLAlchemy — ORM and database interaction
 
-```text
-HisabKeep/
-│
-├── src/
-│   ├── models/
-│   ├── schemas/
-│   ├── routers/
-│   ├── database/
-│   └── main.py
-│
-├── .env
-├── .gitignore
-├── requirements.txt
-└── README.md
-```
+- Pydantic — request/response validation and schemas
 
-## 🔄 API Flow
+- JWT — stateless access-token authentication
 
-HisabKeep follows a simple backend flow:
+- Pytest — automated testing
 
-```text
-Client
-  ↓
-FastAPI Route
-  ↓
-Pydantic Schema
-  ↓
-SQLAlchemy
-  ↓
-PostgreSQL
-  ↓
-Response
-```
+- Git & GitHub — version control and project history
 
-## 🚀 Running Locally
+## 4. ✨ Key Features
 
-### 1. Clone the repository
+- User registration
+
+- Password hashing and password verification
+
+- User login with JWT access tokens
+
+- Protected API endpoints
+
+- User-specific expense authorization
+
+- Create, read, update, and delete expenses
+
+- Request and response validation with Pydantic
+
+- Pagination for expense listing
+
+- HTTP Exception handling for missing resources
+
+- Automated API and authorization tests
+
+## 5. 🔑 Security & Authorization
+
+HisabKeep does not treat authentication as sufficient authorization. After a user is authenticated, expense queries and modifications are scoped to the authenticated user's identity. This prevents one account from reading or modifying another user's expense records.
+
+Passwords are stored as hashes rather than plaintext values, and JWT access tokens are used to protect authenticated endpoints.
+
+## 6. 🧮 Validation & Error Handling
+
+- Pydantic schemas validate incoming request data and outgoing responses.
+
+- Invalid or missing resources return appropriate HTTP errors.
+
+- Protected endpoints reject unauthenticated requests.
+
+- Authorization checks prevent cross-user access to expense data.
+
+- Database operations are handled through the application's database session.
+
+## 7. 🔥 Testing
+
+The project includes automated tests covering the main authentication, expense, validation, and authorization flows. Tests use a controlled database/session setup so test data does not need to be written to the production database.
+
+- User registration
+
+- User login and authentication
+
+- Protected endpoints
+
+- Expense creation
+
+- Expense retrieval
+
+- Expense update
+
+- Expense deletion
+
+- Invalid/non-existent expense IDs
+
+- User isolation — one user cannot access another user's expenses
+
+## 8. 💻 Running Locally
+
+Clone the repository and create a virtual environment:
 
 ```bash
-git clone https://github.com/thesohailahmad/HisabKeep
+git clone <YOUR_REPOSITORY_URL>
 cd HisabKeep
+python -m venv .venv
 ```
 
-### 2. Create a virtual environment
+Activate the environment on Windows:
 
 ```bash
-python -m venv venv
+.venv\Scripts\activate
 ```
 
-Activate it on Windows:
-
-```bash
-venv\Scripts\activate
-```
-
-### 3. Install dependencies
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure environment variables
+Configure the required environment variables in a local .env file, including the PostgreSQL connection details and JWT configuration.
 
-Create a `.env` file and add your PostgreSQL database configuration.
+- see the file .env.example which has database connection details and JWT configuration.
 
-Example:
-
-```env
-see .env.example file
-```
-
-### 5. Run the API
+Start the development server:
 
 ```bash
 uvicorn src.main:app --reload
 ```
 
-## 🧪 Testing
+Once running, the interactive API documentation is available through FastAPI's Swagger UI at /docs.
 
-The API can currently be tested using FastAPI's interactive Swagger documentation.
+## 9. 🚀 Running Tests
 
-Future development will include automated tests for:
+Run the complete test suite with:
 
-* Successful requests
-* Validation errors
-* Missing resources
-* Database operations
-* Authentication and authorization
+```bash
+pytest
+```
 
-## 🗺️ Roadmap
+- conftest_example.py file add your credential of database and than run test.
 
-* [x] FastAPI project setup
-* [x] PostgreSQL connection
-* [x] SQLAlchemy models
-* [x] Pydantic schemas
-* [x] Create expense
-* [x] Read expense
-* [x] Update expense
-* [x] Delete expense
-* [ ] Input validation improvements
-* [ ] Pagination
-* [ ] Expense filtering
-* [x] User authentication
-* [ ] Authorization
-* [ ] Automated testing
-* [ ] API documentation improvements
-* [ ] Deployment
+- Tests should use the project's test database/session configuration rather than the main application database.
 
-## 📚 What I'm Learning
+## 10. 🏗️ Design Decisions
 
-HisabKeep is not just a CRUD project. I am using it to understand the fundamentals behind backend development rather than simply generating code with AI.
+- PostgreSQL was selected for reliable relational data storage and strong SQL support.
 
-The project is being developed incrementally, with each feature used to understand the underlying concepts before moving to the next one.
+- SQLAlchemy provides a clear ORM layer between application code and PostgreSQL.
 
-## 📄 License
+- Pydantic schemas keep API contracts separate from database models.
 
-This project is currently for learning and development purposes.
+- JWT authentication provides a stateless mechanism for protecting API endpoints.
+
+- User ownership checks are enforced at the backend rather than relying on the client.
+
+- Automated tests were added before considering the backend complete.
+
+## 11. 🧠 Challenges & Lessons Learned
+
+- Understanding the difference between authentication and authorization.
+
+- Ensuring that authenticated users can access only their own records.
+
+- Handling update operations correctly instead of accidentally creating new records.
+
+- Designing test database/session overrides so tests remain isolated from real data.
+
+- Using validation and explicit HTTP errors to make API behavior predictable.
+
+- Refactoring code after the initial CRUD implementation to improve maintainability.
+
+## 12. 🎯 Future Improvements
+
+- Containerize the application with Docker.
+
+- Run FastAPI and PostgreSQL with Docker Compose.
+
+- Add production deployment and environment-specific configuration.
+
+- Build a web frontend and integrate it with the API.
+
+- Add refresh-token/session management if the application requires longer-lived authentication.
+
+- Add more advanced filtering, sorting, and reporting for expenses.
+
+- Add CI checks to automatically run tests on every push or pull request.
+
+## 13. Project Status
+
+The core backend is implemented and tested. Authentication, authorization, expense CRUD operations, validation, and automated tests are in place. The next engineering phase is containerization, deployment, and frontend integration.
+
+## 📜 License
+
+Copyright (c) 2026 Sohail Ahmad. All rights reserved.
+
+This repository is publicly available for viewing and educational/
+portfolio purposes. No permission is granted to copy, modify,
+distribute, sublicense, or use this software or substantial portions
+of it for other projects without prior written permission from the
+copyright holder.
+
+For permission to use this project, please contact the author.
+
+## 14. ✒️ Author
+
+Sohail Ahmad
+
+GitHub: (https://github.com/thesohailahmad)
