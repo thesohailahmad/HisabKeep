@@ -1,6 +1,10 @@
 from sqlalchemy import Column,Integer,String , TIMESTAMP , func , ForeignKey
 from src.database.base import Base
 
+#class for expense model
+#table to store expense data
+#ExpenseModel class inherits from Base class which is imported from base.py file
+#ExpenseModel connected user_registration table through user_id foreign key
 class ExpenseModel(Base):
     __tablename__ = "expenses"
 

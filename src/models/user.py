@@ -1,6 +1,9 @@
-
 from sqlalchemy import Column,Integer,String , TIMESTAMP , func
 from src.database.base import Base
+
+#class for user model
+#table to store user data
+#UserModel class inherits from Base class which is imported from base.py file
 
 class UserModel(Base):
     __tablename__ = "user_registration"

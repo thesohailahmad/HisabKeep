@@ -3,12 +3,11 @@ from fastapi.security import OAuth2PasswordBearer
 import jwt
 from jwt.exceptions import PyJWTError
 from sqlalchemy.orm import Session
-
 from src.database.db import settings
 from src.database.session import get_db
 from src.models.user import UserModel
 
-
+## schema for oauth2
 oauth2_schema = OAuth2PasswordBearer(tokenUrl='auth/login/')
 credentials_exception = HTTPException(
     status_code=status.HTTP_401_UNAUTHORIZED,
@@ -16,6 +15,7 @@ credentials_exception = HTTPException(
     headers={"WWW-Authenticate": "Bearer"},
 )
 
+# function to get the current user from the token
 def get_current_user(token: str = Depends(oauth2_schema) , db : Session = Depends(get_db)):
     try:
         payload = jwt.decode(

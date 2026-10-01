@@ -3,16 +3,18 @@ from src.database.db import settings
 import jwt
 from datetime import datetime, timedelta, timezone
 
+# password hashing
 password_hash = PasswordHash.recommended()
 
+# function to hash password
 def hash_password(password : str) -> str:
     return password_hash.hash(password)
 
-
+#function to verify password
 def verify_password(password : str , hash_password : str) -> bool:
     return password_hash.verify(password,hash_password)
 
-
+# function to create access JWT token
 def create_access_token(data: dict):
     to_encode = data.copy()
 

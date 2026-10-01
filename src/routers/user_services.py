@@ -8,6 +8,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter(prefix="/auth" , tags=["User"])
 
+#user registration endpoint
+#register_user function takes user data as input and creates a new user in the database
 @router.post("/register/",
             response_model=UserResponse,
             status_code= status.HTTP_201_CREATED,
@@ -35,6 +37,12 @@ def register_user(data:UserCreate , db : Session = Depends(get_db)):
             detail="Email already exists"
         )
 
+    if len(data.password) < 8:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must be at least 8 characters long"
+        )
+
     new_user = UserModel(
         name=data.name,
         username=data.username,
@@ -48,6 +56,9 @@ def register_user(data:UserCreate , db : Session = Depends(get_db)):
 
     return new_user
 
+# user login endpoint
+#login_user function takes user credentials as input and verifies them against the database. 
+# If the credentials are valid, it generates an access JWT token for the user.
 @router.post("/login/",
             response_model=Token,
             status_code= status.HTTP_200_OK,

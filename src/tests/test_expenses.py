@@ -183,8 +183,11 @@ def test_update_expense_not_found(auth_headers):
 
 def test_update_expenses_unauthorized(test_expense):
     expense_id = test_expense["id"]
-    response = client.put(f"/expenses/update_expense/{expense_id}")
+    response = client.put(f"/expenses/Update_expense/{expense_id}")
     assert response.status_code == 401
+
+
+
 
 def test_delete_expense(auth_headers, test_expense):
     expense_id = test_expense["id"]
@@ -204,7 +207,7 @@ def test_delete_expense_not_found(auth_headers):
     assert response.status_code == 404
 
 
-def test_update_expenses_unauthorized(test_expense):
+def test_delete_expense_unauthorized(test_expense):
     expense_id = test_expense["id"]
     response = client.delete(f"/expenses/delete_expense/{expense_id}")
     assert response.status_code == 401
@@ -260,7 +263,7 @@ def test_user_b_cannot_see_user_a_expenses(test_expense, auth_headers_B):
 
 def test_create_expense_negative_amount(auth_headers):
       
-    response = client.put(
+    response = client.post(
         f"/expenses/add_expense/",
         headers=auth_headers,
         json={
@@ -268,11 +271,11 @@ def test_create_expense_negative_amount(auth_headers):
             "name": "Discounted Laptop"
         }
     )
-    assert response.status_code == 405
+    assert response.status_code == 422
 
 def test_create_expense_empty_name(auth_headers):
 
-    response = client.put(
+    response = client.post(
         f"/expenses/add_expense/",
         headers=auth_headers,
         json={
@@ -280,11 +283,11 @@ def test_create_expense_empty_name(auth_headers):
             "category": "Laptop"
         }
     )
-    assert response.status_code == 405
+    assert response.status_code == 422
 
 def test_create_expense_empty_amount(auth_headers):
 
-    response = client.put(
+    response = client.post(
         f"/expenses/add_expense/",
         headers=auth_headers,
         json={
@@ -292,6 +295,6 @@ def test_create_expense_empty_amount(auth_headers):
             "category": "Electronic"
         }
     )
-    assert response.status_code == 405
+    assert response.status_code == 422
 
 

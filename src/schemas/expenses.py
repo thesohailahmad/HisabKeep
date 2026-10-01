@@ -3,23 +3,28 @@ from typing import Optional
 from datetime import datetime
 from typing import Annotated
 
-
+# ExpenseBase class defines the base schema for expense data, including name, category, description, and amount fields with 
+# validation constraints.
 class ExpenseBase(BaseModel):
-
     name : Annotated[str ,Field(...,max_length=150 , title= "Name",description= "Name of Expense")]
     category : Annotated[Optional[str],Field(default=None ,max_length=250 , title="Category" , description="Category of Expense")]
     description : Annotated[Optional[str] , Field( default=None    ,max_length=250 , title="Description" , description="Description of Expense")]
     amount : Annotated[int ,Field(...,gt=0 , title="Amount" , description="Amount of Expense")]
 
+# CreateExpense class extends ExpenseBase and is used for creating new expense entries. 
+# It inherits all fields from ExpenseBase without adding any additional fields or validation constraints.
 class CreateExpense(ExpenseBase):
     pass
 
+# UpdateExpense class defines the schema for updating expense data, allowing optional fields for name, category, description, and amount 
+# with validation constraints.
 class UpdateExpense(BaseModel):
     name: Annotated[Optional[str] ,Field(max_length=150 , title= "Name",description= "Name of Expense")] = None
     category:  Annotated[Optional[str],Field(max_length=250 , title="Category" , description="Category of Expense")] = None
     description: Annotated[Optional[str], Field(max_length=250 , title="Description" , description="Description of Expense")] = None
     amount: Annotated[Optional[int] , Field(gt=0 ,title="Amount" , description="Amount of Expense")] = None
 
+# ExpenseResponse class extends ExpenseBase and adds id and created_at fields for returning expense data in responses.
 class ExpenseResponse(ExpenseBase):
     id: int
     created_at: datetime

@@ -1,5 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
+#settings class for database connection and other settings
 class Setting(BaseSettings):
 
     model_config = SettingsConfigDict(

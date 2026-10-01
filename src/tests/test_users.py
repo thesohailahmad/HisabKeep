@@ -3,7 +3,7 @@ from src.main import app
 
 client = TestClient(app)
 
-# user registration test
+# user test cases
 
 def test_user_register():
     response = client.post(
@@ -120,7 +120,7 @@ def test_user_password_lenght():
     )
     assert response.status_code == 422
 
-def test_user_emapty_value():
+def test_user_empty_value():
     response = client.post(
         "/auth/register/",
     json={
@@ -135,7 +135,7 @@ def test_user_emapty_value():
 
 
 
-## login testing
+## login test cases
 
 def test_user_login():
         response = client.post(
